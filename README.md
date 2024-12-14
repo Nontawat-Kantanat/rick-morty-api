@@ -1,8 +1,10 @@
-# React + Vite
+This Project is UI Clone Use API and also not complete 100% , i will be still do until finish. THX
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+For how to run this Project 
+-copy link url 
+-use command window powershell
+-type git clone https://github.com/Nontawat-Kantanat/rick-morty-api.git
+-open folder code on VS Code
+-open terminal in VS Code and type .yarn
+-run code with .yarn start
+-run on local host http://localhost:5173/
