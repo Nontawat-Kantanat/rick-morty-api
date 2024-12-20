@@ -1,68 +1,74 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-//Components
-import Title from './assets/components/Title';
+const RickandMorty = () => {
+  const [characters, setCharacter] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-
-
-function App() {
-  const [data, setData] = useState([]);
-  const [number, setNumber] = useState([1,2,3,4,5,6,7,8,9]);
-
-  const fetchAPI = async () => {
-    const response = await axios.get(`https://rickandmortyapi.com/api/character/${number}`);
-    setData(response.data);
-  }
-
+  //  For Data
   useEffect(() => {
-    fetchAPI();
-  }, [number])
+    axios.get(`https://rickandmortyapi.com/api/character?page=${page}`)
+      .then(res => {
+        setCharacter(res.data.results.slice(0, 9));
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
+  }, [page]);
 
-  console.log(data);
-
+  // For BTN
   const prevPage = () => {
-    setNumber((number)=>number - 1)
-  }
-  const nextPage = () => {
-    setNumber((number)=>number + 1)
-  }
+    if (page > 1) {
+      setPage(prevPage => prevPage - 1);
+    }
+  };
 
-  
+  const nextPage = () => {
+    setPage(nextPage => nextPage + 1);
+  };
+
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
 
   return (
-    <div className='bg-[#D3FFE6]'>
-      <Title />
+    <div>
 
-
-      <div className='grid grid-cols-3  justify-items-center gap-12 rounded p-12'>
-        {data.map(val => (
-          <div key={val.id}>
-            <div className='border-4 border-black rounded bg-white '>
-              <img src={val.image} className='' />
-              <div className="">
-                <h1 className="text-2xl font-serif">{val.name}</h1>
-                <h1 className="text-2xl font-serif">{val.species}</h1>
-              </div>
+      {/* data */}
+      <div>
+        {characters.map(character => (
+          <div
+            key={character.id}
+            >
+            <img
+              src={character.image}
+              alt={character.name}           
+            />
+            <div>
+              <h3>
+                {character.name}
+              </h3>
+              <p>
+                {character.species}
+              </p>
             </div>
-
-
           </div>
         ))}
       </div>
 
-      <footer className='py-12'>
-            <div className='container mx-auto text-center flex justify-between'>
-                <button onClick={prevPage} className="bg-[#FFFFFF]  text-black py-2 px-4 border border-black rounded-full">
-                    Previous
-                </button>
-                <button onClick={nextPage} className="bg-[#60A85F] text-black  py-2 px-4 border border-black rounded-full">
-                    Next
-                </button>
-            </div>
-        </footer>
-    </div>
-  )
-}
+      {/* btn */}
+      <div>
+        <button onClick={prevPage}>Previous</button>
+        <button onClick={nextPage}>Next</button>
+      </div>
 
-export default App
+    </div>
+  );
+};
+
+export default RickandMorty
