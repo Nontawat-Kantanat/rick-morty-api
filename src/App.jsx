@@ -37,21 +37,31 @@ const RickandMorty = () => {
 
 
   return (
-    <div className="min-h-screen bg-green-100 p-36">
+    <div className="min-h-screen bg-green-100 p-12">
+
+      {/* title */}
+      <h1 className="text-4xl font-serif text-left text-gray-800 mb-8">
+        Characters of Rick & Morty!
+      </h1>
+
 
       {/* data */}
       <div className="grid grid-cols-3 gap-8">
         {characters.map(character => (
           <div
-            key={character.id}>
+            key={character.id}
+            className="bg-white rounded-lg overflow-hidden flex ">
             <img
               src={character.image}
-              alt={character.name}/>
-            <div>
-              <h3>
+              alt={character.name}
+              className="w-1/3 object-cover" />
+            <div className="p-4 w-2/3">
+              <h3 className="text-lg font-serif text-gray">
                 {character.name}
               </h3>
-              <p>{character.species}</p>
+              <p className="text-md font-serif text-gray">
+                {character.species}
+              </p>
             </div>
           </div>
         ))}
