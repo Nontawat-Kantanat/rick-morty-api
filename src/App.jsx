@@ -3,7 +3,7 @@ import axios from 'axios'
 
 //Components
 import Title from './assets/components/Title';
-import Footer from './assets/components/Footer';
+
 
 
 function App() {
