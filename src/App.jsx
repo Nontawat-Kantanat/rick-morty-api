@@ -37,34 +37,37 @@ const RickandMorty = () => {
 
 
   return (
-    <div>
+    <div className="min-h-screen bg-green-100 p-36">
 
       {/* data */}
-      <div>
+      <div className="grid grid-cols-3 gap-8">
         {characters.map(character => (
           <div
-            key={character.id}
-            >
+            key={character.id}>
             <img
               src={character.image}
-              alt={character.name}           
-            />
+              alt={character.name}/>
             <div>
               <h3>
                 {character.name}
               </h3>
-              <p>
-                {character.species}
-              </p>
+              <p>{character.species}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* btn */}
-      <div>
-        <button onClick={prevPage}>Previous</button>
-        <button onClick={nextPage}>Next</button>
+      <div className="flex justify-between items-center mt-20">
+        <button
+          onClick={prevPage}
+          className="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4  rounded-full"
+        >
+          Previous</button>
+        <button onClick={nextPage}
+          className="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4  rounded-full"
+        >
+          Next</button>
       </div>
 
     </div>
