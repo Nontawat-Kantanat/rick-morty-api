@@ -1,87 +1,55 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import RadioContorls from './Components/RadioControls'
+import CharacterCard from './Components/ChareacterCard'
+import ButtonControls from './Components/ButtonControls'
 
-const RickandMorty = () => {
+const App = () => {
   const [characters, setCharacter] = useState([]);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [sortOption, setSortOption] = useState(null);
+  const [checkedSort, setCheckedSort] = useState('id');
 
-  //  For Data
-  useEffect(() => {
-    axios.get(`https://rickandmortyapi.com/api/character?page=${page}`)
-      .then(res => {
-        setCharacter(res.data.results.slice(0, 9));
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
-  }, [page]);
-
-  // For BTN
-  const prevPage = () => {
-    if (page > 1) {
-      setPage(prevPage => prevPage - 1);
+  const fetchCharacters = async (page) => {
+    try {
+      const res = await axios.get(`https://rickandmortyapi.com/api/character?page=${page}`)
+      setCharacter(res.data.results.slice(0, 9));
+    } catch (error) {
+      console.error("Error fetching data", error);
     }
   };
 
-  const nextPage = () => {
-    setPage(nextPage => nextPage + 1);
+  useEffect(() => {
+    fetchCharacters(page);
+  }, [page]);
+
+  const handleSort = (key) => {
+    setCheckedSort(key);
+    setSortOption(key);
+    const sorted = [...characters].sort((a, b) => {
+      if (key === 'name') return a.name.localeCompare(b.name);
+      return a.id - b.id;
+    });
+    setCharacter(sorted);
   };
 
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
-
   return (
-    <div className="min-h-screen bg-green-100 p-12">
-
-      {/* title */}
-      <h1 className="text-4xl font-serif text-left text-gray-800 mb-8">
-        Characters of Rick & Morty!
-      </h1>
-
-
-      {/* data */}
-      <div className="grid grid-cols-3 gap-8">
-        {characters.map(character => (
-          <div
-            key={character.id}
-            className="bg-white rounded-lg overflow-hidden flex ">
-            <img
-              src={character.image}
-              alt={character.name}
-              className="w-1/3 object-cover" />
-            <div className="p-4 w-2/3">
-              <h3 className="text-lg font-serif text-gray">
-                {character.name}
-              </h3>
-              <p className="text-md font-serif text-gray">
-                {character.species}
-              </p>
-            </div>
-          </div>
+    <div className='bg-green-100 min-h-screen flex flex-col'>
+      <div className='flex justify-between items-center px-4 my-8'>
+        <h1 className='text-4xl font-serif ml-8'>
+          Characters of Rick & Morty!
+        </h1>
+        <RadioContorls onSort={handleSort} checkedSort={checkedSort} />
+      </div>
+      <div className='flex-grow grid  grid-cols-3 gap-4 px-20'>
+        {characters.map((character) => (
+          <CharacterCard key={character.id} character={character} />
         ))}
       </div>
-
-      {/* btn */}
-      <div className="flex justify-between items-center mt-20">
-        <button
-          onClick={prevPage}
-          className="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4  rounded-full"
-        >
-          Previous</button>
-        <button onClick={nextPage}
-          className="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4  rounded-full"
-        >
-          Next</button>
-      </div>
-
+      <ButtonControls onPageChange={setPage} currentPage={page} />
     </div>
   );
 };
 
-export default RickandMorty
+export default App
